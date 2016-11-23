@@ -7,6 +7,21 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Android Camera test" />
+
+    <TextView
+        android:text="Image location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageLabel" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Default location"
+        android:ems="10"
+        android:id="@+id/imageLocation" />
+
     <Button android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
