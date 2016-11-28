@@ -5,8 +5,6 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 
-import static hu.rics.cameratest.R.id.cameraApiButton;
-
 /**
  * Created by rics on 2016.11.28..
  */

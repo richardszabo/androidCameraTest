@@ -33,7 +33,6 @@ import java.util.logging.Logger;
  */
 public class CameraTest extends Activity {
 
-    static final int FOTO_MODE = 0;
     private static final String TAG = "CameraTest";
     CameraApiTest cameraApiTest;
     PhotoIntentTest photoIntentTest;

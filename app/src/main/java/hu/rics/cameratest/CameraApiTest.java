@@ -16,9 +16,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static hu.rics.cameratest.CameraTest.FOTO_MODE;
-import static hu.rics.cameratest.R.layout.camera;
-
 /**
  * Created by rics on 2016.11.28..
  */
@@ -33,6 +30,8 @@ public class CameraApiTest implements SurfaceHolder.Callback, View.OnClickListen
     EditText imageLocationTextField;
     String defaultName = "CameraTest.jpg";
     File sdcardLocation;
+    static final int FOTO_MODE = 0;
+
 
     public CameraApiTest(final CameraTest parent) {
         this.parent = parent;
