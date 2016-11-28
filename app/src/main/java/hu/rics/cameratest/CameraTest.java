@@ -36,6 +36,7 @@ public class CameraTest extends Activity {
     static final int FOTO_MODE = 0;
     private static final String TAG = "CameraTest";
     CameraApiTest cameraApiTest;
+    PhotoIntentTest photoIntentTest;
 
     /** Called when the activity is first created. */
     @Override
@@ -44,6 +45,7 @@ public class CameraTest extends Activity {
 
         setContentView(R.layout.main);
         cameraApiTest = new CameraApiTest(this);
+        photoIntentTest = new PhotoIntentTest(this);
     }
 
     public void showMessage(String message) {

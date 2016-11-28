@@ -27,6 +27,12 @@
             android:layout_height="wrap_content"
             android:text="Camera API" />
 
+    <Button
+        android:text="Image Intent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageIntentButton" />
+
 </LinearLayout>
 
 
