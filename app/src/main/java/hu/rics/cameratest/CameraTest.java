@@ -7,6 +7,7 @@ package hu.rics.cameratest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -27,13 +28,16 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static hu.rics.cameratest.PhotoIntentTest.REQUEST_IMAGE_CAPTURE;
+import static hu.rics.cameratest.R.layout.main;
+
 /**
  *
  * @author rics
  */
 public class CameraTest extends Activity {
 
-    private static final String TAG = "CameraTest";
+    static final String TAG = "CameraTest";
     CameraApiTest cameraApiTest;
     PhotoIntentTest photoIntentTest;
 
@@ -42,9 +46,18 @@ public class CameraTest extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        setContentView(R.layout.main);
+        setContentView(main);
         cameraApiTest = new CameraApiTest(this);
-        photoIntentTest = new PhotoIntentTest(this);
+        final Button imageIntentButton = (Button) findViewById(R.id.imageIntentButton);
+        imageIntentButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent intent = new Intent(CameraTest.this, PhotoIntentTest.class);
+                startActivity(intent);
+            }
+        });
+
+        //photoIntentTest = new PhotoIntentTest(this);
     }
 
     public void showMessage(String message) {
@@ -54,5 +67,4 @@ public class CameraTest extends Activity {
         Toast toast = Toast.makeText(context, message, duration);
         toast.show();
     }
-
 }
