@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">"
     <Button android:id="@+id/cheese"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cheese!" />
     <SurfaceView android:id="@+id/surface_camera"
