@@ -4,14 +4,18 @@
  */
 package hu.rics.cameratest;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -49,6 +53,7 @@ public class CameraTest extends Activity {
         super.onCreate(icicle);
 
         setContentView(main);
+
         cameraApiTest = new CameraApiTest(this);
 
         View.OnClickListener imageIntentListener = new View.OnClickListener() {

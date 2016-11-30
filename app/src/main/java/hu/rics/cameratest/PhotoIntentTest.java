@@ -1,5 +1,6 @@
 package hu.rics.cameratest;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
@@ -33,10 +35,23 @@ public class PhotoIntentTest extends Activity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     boolean isPublic;
     boolean isVideo;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
+        ActivityCompat.requestPermissions(
+                this,
+                PERMISSIONS_STORAGE,
+                REQUEST_EXTERNAL_STORAGE
+        );
+
         isPublic = getIntent().getBooleanExtra("isPublic",false);
         Log.i(CameraTest.TAG,"isPublic:" + isPublic);
         isVideo = getIntent().getBooleanExtra("isVideo",false);

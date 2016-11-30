@@ -1,8 +1,12 @@
 package hu.rics.cameratest;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -31,7 +35,6 @@ public class CameraApiTest implements SurfaceHolder.Callback, View.OnClickListen
     String defaultName = "CameraTest.jpg";
     File sdcardLocation;
     static final int FOTO_MODE = 0;
-
 
     public CameraApiTest(final CameraTest parent) {
         this.parent = parent;
