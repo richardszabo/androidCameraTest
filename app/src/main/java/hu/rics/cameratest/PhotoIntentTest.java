@@ -2,6 +2,8 @@ package hu.rics.cameratest;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,8 +18,10 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 /**
  * Created by rics on 2016.11.28..
@@ -32,15 +36,6 @@ public class PhotoIntentTest extends Activity {
         super.onCreate(icicle);
         dispatchTakePictureIntent();
     }
-
-    /*public PhotoIntentTest() {
-        final Button imageIntentButton = (Button) parent.findViewById(R.id.imageIntentButton);
-        imageIntentButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-            }
-        });
-    }*/
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -59,7 +54,13 @@ public class PhotoIntentTest extends Activity {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "hu.rics.cameratest.fileprovider",
                         photoFile);
-                grantUriPermission("hu.rics.cameratest", photoURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                // the following block is necessary otherwise intent cannot save photo
+                // solution taken from here: http://stackoverflow.com/a/18332000/21047
+                List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                for (ResolveInfo resolveInfo : resInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+                    grantUriPermission(packageName, photoURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
@@ -73,7 +74,7 @@ public class PhotoIntentTest extends Activity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        //File image = new File(storageDir, imageFileName + ".jpg");
+                        //getExternalStoragePublicDirectory still does not work
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
@@ -83,10 +84,5 @@ public class PhotoIntentTest extends Activity {
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(CameraTest.TAG,"requestCode:" + requestCode + "resultCode:" + resultCode + ":");
     }
 }
