@@ -30,10 +30,13 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 public class PhotoIntentTest extends Activity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    boolean isPublic;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        isPublic = getIntent().getBooleanExtra("isPublic",false);
+        Log.i(CameraTest.TAG,"isPublic:" + isPublic);
         dispatchTakePictureIntent();
     }
 
@@ -73,8 +76,8 @@ public class PhotoIntentTest extends Activity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                        //getExternalStoragePublicDirectory still does not work
+        File storageDir = isPublic ? getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) :
+                                     getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",

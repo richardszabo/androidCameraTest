@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">"
-     <TextView android:id="@+id/text"
+
+    <TextView android:id="@+id/text"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Android Camera test" />
@@ -28,10 +29,16 @@
             android:text="Camera API" />
 
     <Button
-        android:text="Image Intent"
+        android:text="Image Intent (public)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imageIntentButton" />
+        android:id="@+id/imageIntentPublicButton" />
+
+    <Button
+        android:text="Image Intent (locale)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageIntentLocaleButton" />
 
 </LinearLayout>
 

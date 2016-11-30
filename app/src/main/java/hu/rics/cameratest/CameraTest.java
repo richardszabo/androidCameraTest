@@ -29,6 +29,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static hu.rics.cameratest.PhotoIntentTest.REQUEST_IMAGE_CAPTURE;
+import static hu.rics.cameratest.R.id.imageIntentPublicButton;
+import static hu.rics.cameratest.R.id.imageIntentLocaleButton;
 import static hu.rics.cameratest.R.layout.main;
 
 /**
@@ -48,14 +50,20 @@ public class CameraTest extends Activity {
 
         setContentView(main);
         cameraApiTest = new CameraApiTest(this);
-        final Button imageIntentButton = (Button) findViewById(R.id.imageIntentButton);
-        imageIntentButton.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener imageIntentListener = new View.OnClickListener() {
 
             public void onClick(View v) {
+                //Log.i(TAG,"id:" + v.getId());
                 Intent intent = new Intent(CameraTest.this, PhotoIntentTest.class);
+                intent.putExtra("isPublic",v.getId() == R.id.imageIntentPublicButton);
                 startActivity(intent);
             }
-        });
+        };
+        final Button imageIntentPublicButton = (Button) findViewById(R.id.imageIntentPublicButton);
+        imageIntentPublicButton.setOnClickListener(imageIntentListener);
+
+        final Button imageIntentLocaleButton = (Button) findViewById(R.id.imageIntentLocaleButton);
+        imageIntentLocaleButton.setOnClickListener(imageIntentListener);
 
         //photoIntentTest = new PhotoIntentTest(this);
     }
