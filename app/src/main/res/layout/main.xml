@@ -40,6 +40,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageIntentLocaleButton" />
 
+    <Button
+        android:text="Video Intent (Public)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/videoIntentPublicButton" />
+
+    <Button
+        android:text="Video Intent (Locale)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/videoIntentLocaleButton" />
+
 </LinearLayout>
 
 

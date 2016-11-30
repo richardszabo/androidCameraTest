@@ -50,12 +50,14 @@ public class CameraTest extends Activity {
 
         setContentView(main);
         cameraApiTest = new CameraApiTest(this);
+
         View.OnClickListener imageIntentListener = new View.OnClickListener() {
 
             public void onClick(View v) {
                 //Log.i(TAG,"id:" + v.getId());
                 Intent intent = new Intent(CameraTest.this, PhotoIntentTest.class);
-                intent.putExtra("isPublic",v.getId() == R.id.imageIntentPublicButton);
+                intent.putExtra("isPublic",v.getId() == R.id.imageIntentPublicButton || v.getId() == R.id.videoIntentPublicButton);
+                intent.putExtra("isVideo",v.getId() == R.id.videoIntentPublicButton || v.getId() == R.id.videoIntentLocaleButton);
                 startActivity(intent);
             }
         };
@@ -65,7 +67,11 @@ public class CameraTest extends Activity {
         final Button imageIntentLocaleButton = (Button) findViewById(R.id.imageIntentLocaleButton);
         imageIntentLocaleButton.setOnClickListener(imageIntentListener);
 
-        //photoIntentTest = new PhotoIntentTest(this);
+        final Button videoIntentPublicButton = (Button) findViewById(R.id.videoIntentPublicButton);
+        videoIntentPublicButton.setOnClickListener(imageIntentListener);
+
+        final Button videoIntentLocaleButton = (Button) findViewById(R.id.videoIntentLocaleButton);
+        videoIntentLocaleButton.setOnClickListener(imageIntentListener);
     }
 
     public void showMessage(String message) {
