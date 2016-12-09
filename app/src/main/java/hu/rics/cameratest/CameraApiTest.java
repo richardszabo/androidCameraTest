@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,10 +34,19 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
     Camera camera;
     boolean previewRunning;
     static final int FOTO_MODE = 0;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
+        // permission check
+        int hasCameraPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA);
+        if (hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.CAMERA},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
 
         setContentView(R.layout.camera);
         final Button cheese = (Button) findViewById(R.id.cheese);
@@ -56,10 +66,17 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
             camera.stopPreview();
         }
 
-        Camera.Parameters p = camera.getParameters();
-        p.setPreviewSize(width, height);
+        Camera.Parameters parameters = camera.getParameters();
+        List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
+        int previewWidth = width;
+        int previewHeight = height;
+        if( previewSizes.size() > 0 ) {
+            previewWidth = previewSizes.get(0).width;
+            previewHeight = previewSizes.get(0).height;
+        }
+        parameters.setPreviewSize(previewWidth, previewHeight);
         //p.setPreviewFormat(PixelFormat.JPEG);
-        camera.setParameters(p);
+        camera.setParameters(parameters);
 
         try {
             camera.setPreviewDisplay(holder);
