@@ -1,9 +1,11 @@
 package hu.rics.cameratest;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,41 +23,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by rics on 2016.11.28..
+ * Created by rics on 2016.11.28.
  */
 
-public class CameraApiTest implements SurfaceHolder.Callback, View.OnClickListener {
+public class CameraApiTest extends Activity implements SurfaceHolder.Callback, View.OnClickListener {
 
-    final CameraTest parent;
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
     Camera camera;
     boolean previewRunning;
-    EditText imageLocationTextField;
-    String defaultName = "CameraTest.jpg";
-    File sdcardLocation;
     static final int FOTO_MODE = 0;
 
-    public CameraApiTest(final CameraTest parent) {
-        this.parent = parent;
-        sdcardLocation = Environment.getExternalStorageDirectory();
-        imageLocationTextField = (EditText) parent.findViewById(R.id.imageLocation);
-        File imageLocation = new File(sdcardLocation, defaultName);
-        imageLocationTextField.setText(imageLocation.getAbsolutePath());
-        final Button cameraApiButton = (Button) parent.findViewById(R.id.cameraApiButton);
-        cameraApiButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
 
-            public void onClick(View v) {
-                parent.setContentView(R.layout.camera);
-                final Button cheese = (Button) parent.findViewById(R.id.cheese);
-                surfaceView = (SurfaceView) parent.findViewById(R.id.surface_camera);
-                cheese.setOnClickListener(CameraApiTest.this);
-                surfaceHolder = surfaceView.getHolder();
-                surfaceHolder.addCallback(CameraApiTest.this);
-                surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-            }
-        });
-
+        setContentView(R.layout.camera);
+        final Button cheese = (Button) findViewById(R.id.cheese);
+        surfaceView = (SurfaceView) findViewById(R.id.surface_camera);
+        cheese.setOnClickListener(this);
+        surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.addCallback(this);
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder sh) {
@@ -124,10 +113,10 @@ public class CameraApiTest implements SurfaceHolder.Callback, View.OnClickListen
 
                 Intent mIntent = new Intent();
 
-                saveDataToSDFile(imageLocationTextField.getText().toString(),imageData);
+                saveDataToSDFile(getIntent().getStringExtra("filename"),imageData);
 
-                parent.setResult(FOTO_MODE, mIntent);
-                parent.finish();
+                setResult(FOTO_MODE, mIntent);
+                finish();
                 //camera.startPreview();
             }
         }

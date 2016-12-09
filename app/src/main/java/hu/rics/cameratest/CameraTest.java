@@ -44,8 +44,10 @@ import static hu.rics.cameratest.R.layout.main;
 public class CameraTest extends Activity {
 
     static final String TAG = "CameraTest";
-    CameraApiTest cameraApiTest;
-    PhotoIntentTest photoIntentTest;
+    EditText imageLocationTextField;
+    String defaultName = "CameraTest.jpg";
+    File sdcardLocation;
+
 
     /** Called when the activity is first created. */
     @Override
@@ -53,8 +55,22 @@ public class CameraTest extends Activity {
         super.onCreate(icicle);
 
         setContentView(main);
+        sdcardLocation = Environment.getExternalStorageDirectory();
+        imageLocationTextField = (EditText) findViewById(R.id.imageLocation);
+        File imageLocation = new File(sdcardLocation, defaultName);
+        imageLocationTextField.setText(imageLocation.getAbsolutePath());
 
-        cameraApiTest = new CameraApiTest(this);
+        View.OnClickListener cameraApiListener = new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent intent = new Intent(CameraTest.this, CameraApiTest.class);
+                intent.putExtra("filename",imageLocationTextField.getText().toString());
+                startActivity(intent);
+            }
+        };
+
+        final Button cameraApiButton = (Button) findViewById(R.id.cameraApiButton);
+        cameraApiButton.setOnClickListener(cameraApiListener);
 
         View.OnClickListener imageIntentListener = new View.OnClickListener() {
 
