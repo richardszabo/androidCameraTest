@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -38,12 +39,14 @@ public class PhotoIntentTest extends Activity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     boolean isPublic;
     boolean isVideo;
+    boolean needVideoWorkaround = false;
     File photoFile;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
+        needVideoWorkaround = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP; // for videos on API 17 MediaStore.EXTRA_OUTPUT crashes so for videos I use saveVideoFile instead
         isPublic = getIntent().getBooleanExtra("isPublic",false);
         Log.i(CameraTest.TAG,"isPublic:" + isPublic);
         isVideo = getIntent().getBooleanExtra("isVideo",false);
@@ -65,7 +68,7 @@ public class PhotoIntentTest extends Activity {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                if( !isVideo ) { // for videos on API 17 MediaStore.EXTRA_OUTPUT crashes so for videos I use saveVideoFile instead
+                if( !isVideo || !needVideoWorkaround ) {
                     Uri photoURI = FileProvider.getUriForFile(this,
                             "hu.rics.cameratest.fileprovider",
                             photoFile);
@@ -120,8 +123,11 @@ public class PhotoIntentTest extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Log.i(CameraTest.TAG,"requestCode:" + requestCode + " resultCode:" + resultCode);
-        if ( isVideo && resultCode == RESULT_OK ) {
+        if ( isVideo && needVideoWorkaround && resultCode == RESULT_OK ) {
+            Log.i(CameraTest.TAG,"workaround in video save");
             saveVideoFile(intent);
+        } else {
+            Log.i(CameraTest.TAG,"normal video save");
         }
         finish();
     }
