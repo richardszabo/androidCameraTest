@@ -1,34 +1,23 @@
 package hu.rics.cameratest;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.app.AlertDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by rics on 2016.11.28.
@@ -69,15 +58,30 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
         }
 
         Camera.Parameters parameters = camera.getParameters();
-        List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
-        int previewWidth = width;
-        int previewHeight = height;
-        if( previewSizes.size() > 0 ) {
-            previewWidth = previewSizes.get(0).width;
-            previewHeight = previewSizes.get(0).height;
+        Display display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+        if(display.getRotation() == Surface.ROTATION_0)
+        {
+            Log.i(CameraTest.TAG,"ROTATION_O");
+            camera.setDisplayOrientation(90);
         }
-        parameters.setPreviewSize(previewWidth, previewHeight);
-        //p.setPreviewFormat(PixelFormat.JPEG);
+
+        if(display.getRotation() == Surface.ROTATION_90)
+        {
+            Log.i(CameraTest.TAG,"ROTATION_9O");
+       }
+
+        if(display.getRotation() == Surface.ROTATION_180)
+        {
+            Log.i(CameraTest.TAG,"ROTATION_18O");
+        }
+
+        if(display.getRotation() == Surface.ROTATION_270)
+        {
+            Log.i(CameraTest.TAG,"ROTATION_27O");
+            camera.setDisplayOrientation(180);
+        }
+        parameters.setPreviewSize(width, height);
         camera.setParameters(parameters);
 
         try {
@@ -110,15 +114,15 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
                 fOut.flush();
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(CameraTest.class.getName()).log(Level.SEVERE, null, ex);
+            Log.e(CameraTest.TAG,ex.toString());
         } catch (IOException ex) {
-            Logger.getLogger(CameraTest.class.getName()).log(Level.SEVERE, null, ex);
+            Log.e(CameraTest.TAG,ex.toString());
         } finally {
             if (fOut != null) {
                 try {
                     fOut.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(CameraTest.class.getName()).log(Level.SEVERE, null, ex);
+                    Log.e(CameraTest.TAG,ex.toString());
                 }
             }
         }
