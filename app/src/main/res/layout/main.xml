@@ -26,7 +26,7 @@
     <Button android:id="@+id/cameraApiButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Camera API" />
+            android:text="Camera 1 API photo" />
 
     <Button
         android:text="Image Intent (public)"
