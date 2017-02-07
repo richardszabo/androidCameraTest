@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by rics on 2016.11.28.
@@ -30,6 +31,7 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
     Camera camera;
     boolean previewRunning;
     static final int FOTO_MODE = 0;
+    static final int CAMERA_ID = 0;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -49,7 +51,7 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
     }
 
     public void surfaceCreated(SurfaceHolder sh) {
-        camera = Camera.open();
+        camera = Camera.open(CAMERA_ID);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int i, int width, int height) {
@@ -58,30 +60,15 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
         }
 
         Camera.Parameters parameters = camera.getParameters();
-        Display display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
-        if(display.getRotation() == Surface.ROTATION_0)
-        {
-            Log.i(CameraTest.TAG,"ROTATION_O");
-            camera.setDisplayOrientation(90);
+        List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
+        int previewWidth = width;
+        int previewHeight = height;
+        if( previewSizes.size() > 0 ) {
+            previewWidth = previewSizes.get(0).width;
+            previewHeight = previewSizes.get(0).height;
         }
-
-        if(display.getRotation() == Surface.ROTATION_90)
-        {
-            Log.i(CameraTest.TAG,"ROTATION_9O");
-       }
-
-        if(display.getRotation() == Surface.ROTATION_180)
-        {
-            Log.i(CameraTest.TAG,"ROTATION_18O");
-        }
-
-        if(display.getRotation() == Surface.ROTATION_270)
-        {
-            Log.i(CameraTest.TAG,"ROTATION_27O");
-            camera.setDisplayOrientation(180);
-        }
-        parameters.setPreviewSize(width, height);
+        setCameraDisplayOrientation(this,CAMERA_ID,camera);
+        parameters.setPreviewSize(previewWidth, previewHeight);
         camera.setParameters(parameters);
 
         try {
@@ -98,6 +85,33 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
         camera.stopPreview();
         previewRunning = false;
         camera.release();
+    }
+
+    // correct displayorientation for Ace 3 and SMT800 tab in all four direction
+    // taken from here: http://stackoverflow.com/a/10218309/21047
+    public static void setCameraDisplayOrientation(Activity activity,
+                                                   int cameraId, android.hardware.Camera camera) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+        int rotation = activity.getWindowManager().getDefaultDisplay()
+                .getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
     }
 
     public void onClick(View v) {
