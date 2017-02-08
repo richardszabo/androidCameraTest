@@ -23,10 +23,16 @@
         android:ems="10"
         android:id="@+id/imageLocation" />
 
-    <Button android:id="@+id/cameraApiButton"
+    <Button android:id="@+id/cameraApiImageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Camera 1 API photo" />
+            android:text="Image (Camera 1 API)" />
+
+    <Button
+        android:id="@+id/cameraApiVideoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Video (Camera 1 API)" />
 
     <Button
         android:text="Image Intent (public)"

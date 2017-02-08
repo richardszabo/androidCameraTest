@@ -13,12 +13,15 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import static android.R.attr.id;
 
 /**
  * Created by rics on 2016.11.28.
@@ -43,7 +46,9 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
     void createSurface() {
         setContentView(R.layout.camera);
         final Button cheese = (Button) findViewById(R.id.cheese);
-        surfaceView = (SurfaceView) findViewById(R.id.surface_camera);
+        surfaceView = new SurfaceView(this);
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.addView(surfaceView);
         cheese.setOnClickListener(this);
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
@@ -119,10 +124,11 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
     }
 
     public void saveDataToSDFile(String filename, byte[] data) {
+        String ext = ".jpg";
         FileOutputStream fOut = null;
         try {
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                File file = new File(filename);
+                File file = new File(filename + ext);
                 fOut = new FileOutputStream(file);
                 fOut.write(data);
                 fOut.flush();

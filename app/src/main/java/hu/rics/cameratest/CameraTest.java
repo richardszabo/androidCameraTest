@@ -26,17 +26,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static hu.rics.cameratest.R.layout.main;
-
 /**
  *
  * @author rics
  */
 public class CameraTest extends Activity {
 
-    static final String TAG = "CameraTest";
+    public static final String TAG = "CameraTest";
     EditText imageLocationTextField;
-    String defaultName = "CameraTest.jpg";
+    String defaultName = "CameraTest";
     File sdcardLocation;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 123;
     boolean hasRights = false;
@@ -46,7 +44,7 @@ public class CameraTest extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        setContentView(main);
+        setContentView(R.layout.main);
         sdcardLocation = Environment.getExternalStorageDirectory();
         imageLocationTextField = (EditText) findViewById(R.id.imageLocation);
         File imageLocation = new File(sdcardLocation, defaultName);
@@ -55,7 +53,7 @@ public class CameraTest extends Activity {
             hasRights = true;
         }
 
-        View.OnClickListener cameraApiListener = new View.OnClickListener() {
+        View.OnClickListener cameraApiImageListener = new View.OnClickListener() {
 
             public void onClick(View v) {
             if( hasRights ) {
@@ -66,8 +64,22 @@ public class CameraTest extends Activity {
             }
         };
 
-        final Button cameraApiButton = (Button) findViewById(R.id.cameraApiButton);
-        cameraApiButton.setOnClickListener(cameraApiListener);
+        final Button cameraApiImageButton = (Button) findViewById(R.id.cameraApiImageButton);
+        cameraApiImageButton.setOnClickListener(cameraApiImageListener);
+
+        View.OnClickListener cameraApiVideoListener = new View.OnClickListener() {
+
+            public void onClick(View v) {
+                if( hasRights ) {
+                    Intent intent = new Intent(CameraTest.this, CameraApiVideoTest.class);
+                    intent.putExtra("filename", imageLocationTextField.getText().toString());
+                    startActivity(intent);
+                }
+            }
+        };
+
+        final Button cameraApiVideoButton = (Button) findViewById(R.id.cameraApiVideoButton);
+        cameraApiVideoButton.setOnClickListener(cameraApiVideoListener);
 
         View.OnClickListener imageIntentListener = new View.OnClickListener() {
 
@@ -116,6 +128,10 @@ public class CameraTest extends Activity {
             permissionsNeeded.add("External storage");
         }
 
+        if (!addPermission(permissionsList, Manifest.permission.RECORD_AUDIO)) {
+            Log.i(CameraTest.TAG,"permissionsNeeded.add(\"Audio\");");
+            permissionsNeeded.add("Audio");
+        }
         Log.i(CameraTest.TAG,"onCreate:" + permissionsList.size() + ":" + permissionsNeeded.size());
         if (permissionsList.size() > 0) {
             if (permissionsNeeded.size() > 0) {
@@ -168,6 +184,7 @@ public class CameraTest extends Activity {
                 // Initial
                 perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.RECORD_AUDIO, PackageManager.PERMISSION_GRANTED);
                 // Fill with results
                 for (int i = 0; i < permissions.length; i++) {
                     Log.i(CameraTest.TAG,"i:" + i + ":" + permissions[i] + ":" + grantResults[i] );
@@ -175,7 +192,8 @@ public class CameraTest extends Activity {
                 }
                 // Check for ACCESS_FINE_LOCATION
                 if( perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                        && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ) {
+                        && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
                     // All Permissions Granted
                     hasRights = true;
                 } else {
