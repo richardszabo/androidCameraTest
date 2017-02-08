@@ -1,11 +1,13 @@
 package hu.rics.cameratest.video;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import hu.rics.cameratest.CameraApiTest;
 import hu.rics.cameratest.CameraTest;
 
 /**
@@ -13,12 +15,14 @@ import hu.rics.cameratest.CameraTest;
  */
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+    private Activity activity;
     private SurfaceHolder holder;
     private Camera camera;
     private boolean previewIsRunning;
 
-    public CameraPreview(Context context) {
-        super(context);
+    public CameraPreview(Activity activity) {
+        super(activity);
+        this.activity = activity;
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
@@ -45,6 +49,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+        if (previewIsRunning) {
+            stopPreview();
+        }
+        CameraApiTest.setCameraDisplayOrientation(activity,MediaRecorderWrapper.CAMERA_ID,camera);
+
         startPreview();
         Log.d(CameraTest.TAG,"surfacechanged---------------------");
     }

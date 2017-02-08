@@ -21,6 +21,7 @@ public class MediaRecorderWrapper {
     Camera camera;
     CameraPreview cameraPreview;
     boolean isRecording;
+    static final int CAMERA_ID = 0;
 
     public MediaRecorderWrapper(Activity activity, int id) {
         cameraPreview = new CameraPreview(activity);
@@ -29,7 +30,7 @@ public class MediaRecorderWrapper {
     }
 
     public void startPreview() {
-        camera=Camera.open(); // attempt to get a Camera instance
+        camera=Camera.open(CAMERA_ID); // attempt to get a Camera instance
         cameraPreview.setCamera(camera);
         cameraPreview.startPreview();
     }
@@ -63,7 +64,7 @@ public class MediaRecorderWrapper {
         mediaRecorder = new MediaRecorder();
 
         Log.d(CameraTest.TAG,"prep1");
-        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
         Log.d(CameraTest.TAG,"prep2");
         //http://stackoverflow.com/a/16543157/21047
         Camera.Parameters parameters = camera.getParameters();
