@@ -12,6 +12,9 @@ import java.io.IOException;
 
 import hu.rics.cameratest.CameraTest;
 
+import static android.graphics.ImageFormat.YV12;
+import static android.media.CamcorderProfile.QUALITY_720P;
+
 /**
  * Created by rics on 2017.02.08..
  */
@@ -63,15 +66,25 @@ public class MediaRecorderWrapper {
 
         mediaRecorder = new MediaRecorder();
 
-        Log.d(CameraTest.TAG,"prep1");
-        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
+        Log.d(CameraTest.TAG, "prep1");
+        CamcorderProfile profile;
+        if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_480P)) {
+            profile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+        } else if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P)) {
+            profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
+        } else if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_LOW)) {
+            profile = CamcorderProfile.get(CamcorderProfile.QUALITY_LOW);
+        } else {
+            Log.d(CameraTest.TAG,"Cannot get camcorderprofile");
+            return false;
+        }
         Log.d(CameraTest.TAG,"prep2");
         //http://stackoverflow.com/a/16543157/21047
         Camera.Parameters parameters = camera.getParameters();
         Log.d(CameraTest.TAG,"prep3");
         parameters.setPreviewSize(profile.videoFrameWidth,profile.videoFrameHeight);
         Log.d(CameraTest.TAG,"prep4");
-        parameters.setPreviewFormat(ImageFormat.YV12);
+        parameters.setPreviewFormat(ImageFormat.NV21);
         Log.d(CameraTest.TAG,"prep5");
         camera.setParameters(parameters);
         Log.d(CameraTest.TAG,"prep6");
