@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import hu.rics.cameratest.video.MediaRecorderWrapper;
+import hu.rics.camera1util.MediaRecorderWrapper;
+
 
 /**
  * Created by rics on 2017.02.08..
