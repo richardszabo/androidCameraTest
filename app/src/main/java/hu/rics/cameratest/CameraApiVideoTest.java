@@ -41,6 +41,9 @@ public class CameraApiVideoTest extends Activity implements View.OnClickListener
     @Override
     protected void onPause() {
         super.onPause();
+        if( mediaRecorderWrapper.isRecording() ) {
+            mediaRecorderWrapper.stopRecording();
+        }
         mediaRecorderWrapper.stopPreview();
     }
 
