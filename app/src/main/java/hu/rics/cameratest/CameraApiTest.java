@@ -124,11 +124,9 @@ public class CameraApiTest extends Activity implements SurfaceHolder.Callback, V
 
             if (imageData != null) {
 
-                Intent mIntent = new Intent();
+                saveDataToSDFile(getIntent().getStringExtra(getString(R.string.INTENT_PARAM_FILENAME)),imageData);
 
-                saveDataToSDFile(getIntent().getStringExtra("filename"),imageData);
-
-                setResult(FOTO_MODE, mIntent);
+                setResult(FOTO_MODE);
                 finish();
                 //camera.startPreview();
             }

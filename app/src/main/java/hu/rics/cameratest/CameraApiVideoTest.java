@@ -54,7 +54,7 @@ public class CameraApiVideoTest extends Activity implements View.OnClickListener
             cheese.setText("Start");
             finish();
         } else {
-            mediaRecorderWrapper.startRecording(getIntent().getStringExtra("filename") + ext);
+            mediaRecorderWrapper.startRecording(getIntent().getStringExtra(getString(R.string.INTENT_PARAM_FILENAME)) + ext);
             cheese.setText("Stop");
         }
     }

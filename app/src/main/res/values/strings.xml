@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="app_name">CameraTest</string>
+    <string name="INTENT_PARAM_FILENAME">hu.rics.cameratest.FILENAME</string>
+    <string name="DEFAULT_FILENAME">CameraTest</string>
 </resources>

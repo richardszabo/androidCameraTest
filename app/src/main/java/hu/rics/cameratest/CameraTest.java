@@ -34,7 +34,6 @@ public class CameraTest extends Activity {
 
     public static final String TAG = "CameraTest";
     EditText imageLocationTextField;
-    String defaultName = "CameraTest";
     File sdcardLocation;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 123;
     boolean hasRights = false;
@@ -47,7 +46,7 @@ public class CameraTest extends Activity {
         setContentView(R.layout.main);
         sdcardLocation = Environment.getExternalStorageDirectory();
         imageLocationTextField = (EditText) findViewById(R.id.imageLocation);
-        File imageLocation = new File(sdcardLocation, defaultName);
+        File imageLocation = new File(sdcardLocation, getString(R.string.DEFAULT_FILENAME));
         imageLocationTextField.setText(imageLocation.getAbsolutePath());
         if( requestPermission() ) {
             hasRights = true;
@@ -58,7 +57,7 @@ public class CameraTest extends Activity {
             public void onClick(View v) {
             if( hasRights ) {
                 Intent intent = new Intent(CameraTest.this, CameraApiTest.class);
-                intent.putExtra("filename", imageLocationTextField.getText().toString());
+                intent.putExtra(getString(R.string.INTENT_PARAM_FILENAME), imageLocationTextField.getText().toString());
                 startActivity(intent);
             }
             }
@@ -72,7 +71,7 @@ public class CameraTest extends Activity {
             public void onClick(View v) {
                 if( hasRights ) {
                     Intent intent = new Intent(CameraTest.this, CameraApiVideoTest.class);
-                    intent.putExtra("filename", imageLocationTextField.getText().toString());
+                    intent.putExtra(getString(R.string.INTENT_PARAM_FILENAME), imageLocationTextField.getText().toString());
                     startActivity(intent);
                 }
             }
