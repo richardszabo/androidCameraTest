@@ -65,7 +65,7 @@ public class PhotoIntentTest extends Activity {
                     Uri photoURI = FileProvider.getUriForFile(this,
                             "hu.rics.cameratest.fileprovider",
                             photoFile);
-                    // the following block is necessary otherwise intent cannot save photo
+                    // the following block is necessary otherwise intent cannot save photo on Ace3
                     // solution taken from here: http://stackoverflow.com/a/18332000/21047
                     List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(takeCameraIntent, PackageManager.MATCH_DEFAULT_ONLY);
                     for (ResolveInfo resolveInfo : resInfoList) {
@@ -83,9 +83,12 @@ public class PhotoIntentTest extends Activity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = (isVideo ? "MPEG_" : "JPEG_") + timeStamp + "_";
-        String dirName = isVideo ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES;
-        File storageDir = isPublic ? getExternalStoragePublicDirectory(dirName) :
-                                     getExternalFilesDir(dirName);
+        String dirType = isVideo ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES;
+        File storageDir = isPublic ? getExternalStoragePublicDirectory(dirType) :
+                                     getExternalFilesDir(dirType);
+        if( !storageDir.exists() ) {
+            storageDir.mkdirs();
+        }
         File image = File.createTempFile(
                 imageFileName,
                 isVideo ? ".mp4" : ".jpg",

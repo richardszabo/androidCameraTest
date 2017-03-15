@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path name="my_images_public" path="Pictures" />
-    <external-path name="my_images_private" path="Android/data/hu.rics.cameratest/files/Pictures" />
+    <external-files-path name="my_images_private" path="Pictures" />
     <external-path name="my_videos_public" path="Movies" />
-    <external-path name="my_videos_private" path="Android/data/hu.rics.cameratest/files/Movies" />
+    <external-files-path name="my_videos_private" path="Movies" />
 </paths>
